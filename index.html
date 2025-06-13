@@ -34,6 +34,12 @@
       height: 100%;
     }
 
+    /* Force browser to parse the CSS variable content */
+    body::before {
+      content: var(--greeting-message);
+      display: none;
+    }
+
     #chatbot-toggle {
       position: fixed;
       bottom: 20px;
@@ -165,7 +171,7 @@
 
 <!-- Greeting Bubble -->
 <div id="chatbot-greeting" aria-live="polite">
-  👋 Hello! How can I Assist You Today?
+  👋 Hello! How can I assist you today?
 </div>
 
 <!-- Chatbot Container -->
@@ -194,8 +200,18 @@
   const chatbotGreetingShown = localStorage.getItem('chatbotGreetingShown');
 
   window.addEventListener('DOMContentLoaded', () => {
-    chatbotGreeting.textContent = getComputedStyle(document.documentElement).getPropertyValue('--greeting-message').replace(/(^\s*")|("\s*$)/g, '');
-    chatbotName.textContent = getComputedStyle(document.documentElement).getPropertyValue('--chatbot-header-title').replace(/(^\s*")|("\s*$)/g, '');
+    let greeting = getComputedStyle(document.documentElement).getPropertyValue('--greeting-message').replace(/(^\s*")|("\s*$)/g, '');
+    let headerTitle = getComputedStyle(document.documentElement).getPropertyValue('--chatbot-header-title').replace(/(^\s*")|("\s*$)/g, '');
+
+    if (!greeting.trim()) {
+      greeting = "👋 Hello! How can we assist you today?";
+    }
+    if (!headerTitle.trim()) {
+      headerTitle = "Hammond Farms Customer Service";
+    }
+
+    chatbotGreeting.textContent = greeting;
+    chatbotName.textContent = headerTitle;
 
     if (!chatbotGreetingShown) {
       chatbotGreeting.style.display = 'block';
