@@ -1,43 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hammond Farms Chatbot Widget</title>
   <style>
-    :root {
-      --pulse-color: rgba(252, 225, 156, 0.6);
-      --pulse-fade: rgba(252, 225, 156, 0.6);
-
-      --button-fill: #440e06;
-      --chat-icon-color: #ffffff;
-      --chat-icon-dot: #000000;
-
-      --header-gradient-start: #440e06;
-      --header-gradient-end: #8e544d;
-      --header-text-color: #ffffff;
-      --header-subtext-color: #000000;
-
-      --container-background: #ffffff;
-
-      --greeting-background: #fce19c;
-      --greeting-text-color: #000000;
-      --greeting-border-color: #440e06;
-
-      --greeting-message: "👋 Hello! How can we assist you?";
-      --chatbot-header-title: "Hammond Farms Customer Service";
-    }
-
     html, body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      height: 100%;
-    }
-
-    /* Force browser to parse the CSS variable content */
-    body::before {
-      content: var(--greeting-message);
-      display: none;
     }
 
     #chatbot-toggle {
@@ -51,7 +22,7 @@
       height: 60px;
       cursor: pointer;
       padding: 0;
-      z-index: 10000 !important;
+      z-index: 9999;
       animation: pulse 2s infinite ease-in-out;
     }
 
@@ -62,9 +33,9 @@
     }
 
     @keyframes pulse {
-      0% { box-shadow: 0 0 0 0.6 var(--pulse-color); }
-      50% { box-shadow: 0 0 0 12px var(--pulse-fade); }
-      100% { box-shadow: 0 0 0 0 var(--pulse-fade); }
+      0% { box-shadow: 0 0 0 0 rgba(252, 225, 156, 0.6); }
+      50% { box-shadow: 0 0 0 12px rgba(252, 225, 156, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(252, 225, 156, 0); }
     }
 
     #chatbot-container {
@@ -75,8 +46,8 @@
       height: 620px;
       border-radius: 20px;
       overflow: hidden;
+      background: #ffffff;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      background: var(--container-background) !important;
       opacity: 1 !important;
       z-index: 9999 !important;
       display: none;
@@ -88,8 +59,8 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 15px;
-      background: linear-gradient(90deg, var(--header-gradient-start), var(--header-gradient-end));
-      color: var(--header-text-color);
+      background: linear-gradient(90deg, #440e06 0%, #8e544d 100%);
+      color: #ffffff;
       font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
     }
 
@@ -105,14 +76,14 @@
 
     #chatbot-title {
       font-size: 12px;
-      color: var(--header-subtext-color);
+      color: #000000;
     }
 
     #chatbot-close {
       background: transparent;
       border: none;
       font-size: 20px;
-      color: var(--header-text-color);
+      color: #ffffff;
       cursor: pointer;
     }
 
@@ -121,23 +92,22 @@
       height: 100%;
       border: none;
       flex-grow: 1;
-      box-sizing: border-box;
     }
 
     #chatbot-greeting {
       position: fixed;
       bottom: 100px;
       right: 30px;
-      background: var(--greeting-background);
-      color: var(--greeting-text-color);
+      background: #fce19c;
+      color: #000000;
       padding: 12px 16px;
       border-radius: 18px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
       font-size: 15px;
       max-width: 240px;
       font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
-      z-index: 10000 !important;
-      border: 1px solid var(--greeting-border-color);
+      z-index: 9999;
+      border: 1px solid #440e06;
       display: none;
       animation: fadeIn 0.6s ease-in-out;
     }
@@ -147,12 +117,32 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 768px) {
       #chatbot-container {
         width: 90vw;
         height: 80vh;
-        right: 5%;
-        bottom: 100px;
+        right: 5vw;
+        bottom: 80px;
+        border-radius: 16px;
+      }
+
+      #chatbot-toggle {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+      }
+
+      #chatbot-toggle svg {
+        width: 50px;
+        height: 50px;
+      }
+
+      #chatbot-greeting {
+        font-size: 14px;
+        bottom: 90px;
+        right: 20px;
+        max-width: 200px;
       }
     }
   </style>
@@ -162,23 +152,23 @@
 <!-- Toggle Button -->
 <button id="chatbot-toggle" aria-label="Open Chatbot" title="Chat">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-    <circle cx="32" cy="32" r="32" style="fill: var(--button-fill);" />
-    <path d="M20 20h24c2.2 0 4 1.8 4 4v12c0 2.2-1.8 4-4 4H28l-6 6v-6h-2c-2.2 0-4-1.8-4-4V24c0-2.2 1.8-4 4-4z" style="fill: var(--chat-icon-color);" />
-    <circle cx="28" cy="30" r="2" style="fill: var(--chat-icon-dot);" />
-    <circle cx="36" cy="30" r="2" style="fill: var(--chat-icon-dot);" />
+    <circle cx="32" cy="32" r="32" fill="#440e06" />
+    <path d="M20 20h24c2.2 0 4 1.8 4 4v12c0 2.2-1.8 4-4 4H28l-6 6v-6h-2c-2.2 0-4-1.8-4-4V24c0-2.2 1.8-4 4-4z" fill="#ffffff" />
+    <circle cx="28" cy="30" r="2" fill="#000000" />
+    <circle cx="36" cy="30" r="2" fill="#000000" />
   </svg>
 </button>
 
-<!-- Greeting Bubble -->
+<!-- Greeting Message -->
 <div id="chatbot-greeting" aria-live="polite">
-  👋 Hello! How can I assist you today?
+  👋 Hello! How can we assist you today?
 </div>
 
 <!-- Chatbot Container -->
 <div id="chatbot-container" role="dialog" aria-label="Chatbot dialog">
   <div id="chatbot-header">
     <div id="chatbot-info">
-      <div id="chatbot-name"></div>
+      <div id="chatbot-name">Hammond Farms Customer Service</div>
     </div>
     <button id="chatbot-close" aria-label="Close Chatbot">×</button>
   </div>
@@ -189,70 +179,65 @@
   </iframe>
 </div>
 
+<!-- JavaScript Logic -->
 <script>
-  const toggleBtn = document.getElementById('chatbot-toggle');
-  const chatContainer = document.getElementById('chatbot-container');
-  const closeBtn = document.getElementById('chatbot-close');
-  const chatbotGreeting = document.getElementById('chatbot-greeting');
-  const chatbotName = document.getElementById('chatbot-name');
-  const isMobile = window.innerWidth <= 500;
-  const chatbotShown = localStorage.getItem('chatbotShown');
-  const chatbotGreetingShown = localStorage.getItem('chatbotGreetingShown');
+  const toggleBtn        = document.getElementById('chatbot-toggle');
+  const chatContainer    = document.getElementById('chatbot-container');
+  const closeBtn         = document.getElementById('chatbot-close');
+  const chatbotGreeting  = document.getElementById('chatbot-greeting');
 
+  // Keys for localStorage
+  const GREETING_KEY     = 'chatbot_greeting_shown';
+  const CHATBOT_CLOSED   = 'chatbot_closed_by_user';
+
+  // Configuration
+  const GREETING_TIME_MS = 8000;  // Hide greeting after 8 s
+  const AUTO_OPEN_DELAY  = 4000;  // Auto‑open chatbot after 4 s
+
+  const hasSeenGreeting  = () => localStorage.getItem(GREETING_KEY) === 'true';
+  const hasClosedChatbot = () => localStorage.getItem(CHATBOT_CLOSED) === 'true';
+
+  // ---------- Initial load ----------
   window.addEventListener('DOMContentLoaded', () => {
-    let greeting = getComputedStyle(document.documentElement).getPropertyValue('--greeting-message').replace(/(^\s*")|("\s*$)/g, '');
-    let headerTitle = getComputedStyle(document.documentElement).getPropertyValue('--chatbot-header-title').replace(/(^\s*")|("\s*$)/g, '');
-
-    if (!greeting.trim()) {
-      greeting = "👋 Hello! How can we assist you today?";
-    }
-    if (!headerTitle.trim()) {
-      headerTitle = "Hammond Farms Customer Service";
-    }
-
-    chatbotGreeting.textContent = greeting;
-    chatbotName.textContent = headerTitle;
-
-    if (!chatbotGreetingShown) {
+    if (!hasSeenGreeting() && !hasClosedChatbot()) {
+      // Show greeting bubble once
       chatbotGreeting.style.display = 'block';
-      setTimeout(() => {
-        chatbotGreeting.style.display = 'none';
-        localStorage.setItem('chatbotGreetingShown', 'true');
-      }, 4000);
-    }
 
-    if (!chatbotShown && !isMobile) {
+      // Auto‑open the chatbot after 4 seconds
       setTimeout(() => {
-        chatContainer.style.display = 'flex';
-        toggleBtn.style.display = 'none';
         chatbotGreeting.style.display = 'none';
-        localStorage.setItem('chatbotShown', 'true');
-        localStorage.setItem('chatbotGreetingShown', 'true');
-      }, 4000);
-    } else {
-      toggleBtn.style.display = 'block';
+        chatContainer.style.display  = 'flex';
+        toggleBtn.style.display      = 'none';
+        localStorage.setItem(GREETING_KEY, 'true');
+      }, AUTO_OPEN_DELAY);
+
+      // Ensure greeting disappears permanently after 8 seconds
+      setTimeout(() => {
+        chatbotGreeting.style.display = 'none';
+        localStorage.setItem(GREETING_KEY, 'true');
+      }, GREETING_TIME_MS);
     }
   });
 
+  // ---------- User interactions ----------
   toggleBtn.addEventListener('click', () => {
     chatContainer.style.display = 'flex';
-    toggleBtn.style.display = 'none';
+    toggleBtn.style.display     = 'none';
     chatbotGreeting.style.display = 'none';
-    localStorage.setItem('chatbotShown', 'true');
-    localStorage.setItem('chatbotGreetingShown', 'true');
+    localStorage.setItem(GREETING_KEY, 'true');
   });
 
   closeBtn.addEventListener('click', () => {
     chatContainer.style.display = 'none';
-    toggleBtn.style.display = 'block';
-    chatbotGreeting.style.display = 'none';
+    toggleBtn.style.display     = 'block';
+    localStorage.setItem(CHATBOT_CLOSED, 'true');
   });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       chatContainer.style.display = 'none';
-      toggleBtn.style.display = 'block';
-      chatbotGreeting.style.display = 'none';
+      toggleBtn.style.display     = 'block';
+      localStorage.setItem(CHATBOT_CLOSED, 'true');
     }
   });
 </script>
